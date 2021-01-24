@@ -1,0 +1,84 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  - master
+
+pool:
+  vmImage: 'windows-2019'
+
+variables:
+  BuildConfiguration: 'Release'
+  ServiceConnection: 'Jason Specland MS Internal (78665f33-bc7d-43df-9f83-ac1064dd74eb)'
+
+stages:
+- stage: 'Build'
+  jobs:
+  - job: 'Build'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: restore
+
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        arguments: '--configuration $(BuildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: Publish
+      inputs:
+        command: publish
+        publishWebProjects: True
+        arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+        zipAfterPublish: True
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      inputs:
+        artifactName: 'drop'
+        pathtoPublish: '$(build.artifactstagingdirectory)'
+
+- stage: 'Dev_Deploy'
+  displayName: 'Deploy to Dev Environment'
+  jobs:
+  - deployment: 'Dev_Deploy_WebApp'
+    displayName: 'Deploy Dev Web Application'
+    environment: 'Dev'
+    variables:
+      MyVariable: 'DEV_VALUE'
+      WebAppName: 'pipelinesapprovaldemo-dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy Azure App Service'
+            inputs:
+              azureSubscription: '$(ServiceConnection)'
+              appType: 'webApp'
+              package: '$(Pipeline.Workspace)/**/*.zip'
+              webAppName: '$(WebAppName)'
+              appSettings: '-MyVariable $(MyVariable)'
+
+- stage: 'Prod_Deploy'
+  displayName: 'Deploy to Production Environment'
+  jobs:
+  - deployment: 'Prod_Deploy_WebApp'
+    displayName: 'Deploy Production Web Appliction'
+    environment: 'Prod'
+    variables:
+      MyVariable: 'PROD_VALUE'
+      WebAppName: 'pipelinesapprovaldemo-prod'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy Azure App Service'
+            inputs:
+              azureSubscription: '$(ServiceConnection)'
+              appType: 'webApp'
+              package: '$(Pipeline.Workspace)/**/*.zip'
+              webAppName: '$(WebAppName)'
+              appSettings: '-MyVariable $(MyVariable)'

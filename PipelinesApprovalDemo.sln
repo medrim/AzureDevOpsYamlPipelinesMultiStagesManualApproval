@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30028.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PipelinesApprovalDemo", "PipelinesApprovalDemo\PipelinesApprovalDemo.csproj", "{F721654B-B7A9-4522-ACF0-BC0A7D66A0D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{623C2124-9554-4C10-9E45-F413DD052D8F}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F721654B-B7A9-4522-ACF0-BC0A7D66A0D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F721654B-B7A9-4522-ACF0-BC0A7D66A0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F721654B-B7A9-4522-ACF0-BC0A7D66A0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F721654B-B7A9-4522-ACF0-BC0A7D66A0D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36A7A61F-B549-41F8-8A3A-F73125117718}
+	EndGlobalSection
+EndGlobal
